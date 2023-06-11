@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Jimp App</title>
+  </head>
+  <body>
+    <h1>Process Image with Jimp</h1>
+    <p id="message">Upload an image</p>
+    <form id="uploadForm">
+      <input
+        type="file"
+        id="imageInput"
+        accept="image/*"
+        name="image"
+        required />
+      <button type="submit">Upload</button>
+      <p><img id="image" src="" /></p>
+    </form>
+
+    <script>
+      const uploadForm = document.getElementById("uploadForm");
+      const imageInput = document.getElementById("imageInput");
+      const message = document.getElementById("message");
+      const image = document.getElementById("image");
+      const downloadButton = document.getElementById("downloadButton");
+
+      uploadForm.addEventListener("submit", uploadImage);
+
+      async function uploadImage() {
+        event.preventDefault();
+
+        const file = imageInput.files[0];
+        if (!file) {
+          alert("Please select an image file");
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+          message.innerHTML = "Uploading...";
+          const response = await fetch("http://localhost:3100/upload", {
+            method: "POST",
+            body: formData,
+          });
+
+          message.innerHTML = "Image uploaded successfully";
+          const data = await response.json();
+          console.log(data.file);
+
+          image.src = data.file;
+          // downloadButton.download = data.file;
+        } catch (error) {
+          console.error("Error uploading image:", error);
+        }
+      }
+    </script>
+  </body>
+</html>
