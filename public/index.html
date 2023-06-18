@@ -47,10 +47,9 @@
 
           message.innerHTML = "Image uploaded successfully";
           const data = await response.json();
-          console.log(data.file);
+          const imageUrl = data.file;
 
-          image.src = data.file;
-          // downloadButton.download = data.file;
+          image.src = imageUrl;
         } catch (error) {
           console.error("Error uploading image:", error);
         }
